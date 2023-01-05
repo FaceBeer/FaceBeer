@@ -49,12 +49,12 @@ class Model:
     self.interpreter.allocate_tensors()
 
 
-def predict(self, img):
-  common.set_input(self.interpreter, img)
-  self.interpreter.invoke()
-  classes = classify.get_classes(self.interpreter, 1, 0)
-  for c in classes:
-    print('%s: %.5f' % (self.labels.get(c.id, c.id), c.score))
+  def predict(self, img):
+    common.set_input(self.interpreter, img)
+    self.interpreter.invoke()
+    classes = classify.get_classes(self.interpreter, 1, 0)
+    for c in classes:
+      print('%s: %.5f' % (self.labels.get(c.id, c.id), c.score))
 
 
 
