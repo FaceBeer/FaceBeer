@@ -46,7 +46,7 @@ class Model:
     self.labels_path="labels.txt" 
     self.labels = read_label_file(self.labels_path) 
     self.interpreter =make_interpreter(self.model_path)
-    interpreter.allocate_tensors()
+    self.interpreter.allocate_tensors()
 
 
 def predict(self, img):
@@ -60,7 +60,7 @@ def predict(self, img):
 
 def main():
   image_path = "images/dog.jpg"
-  image = Image.open(args.input).convert('RGB')
+  image = Image.open(image_path).convert('RGB')
   model = Model()
   model.predict(image)
  
