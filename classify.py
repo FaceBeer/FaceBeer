@@ -47,9 +47,11 @@ class Model:
     self.labels = read_label_file(self.labels_path) 
     self.interpreter =make_interpreter(self.model_path)
     self.interpreter.allocate_tensors()
+    self.size = common.input_size(self.interpreter)
 
 
   def predict(self, img):
+    img = img.resize(self.size, Image.ANTIALIAS)
     common.set_input(self.interpreter, img)
     self.interpreter.invoke()
     classes = classify.get_classes(self.interpreter, 1, 0)
