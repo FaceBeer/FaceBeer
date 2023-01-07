@@ -1,55 +1,82 @@
 
-import board
-import digitalio
-from PIL import Image, ImageDraw, ImageFont
-import adafruit_ssd1306
+import time
 
-oled_reset = digitalio.DigitalInOut(board.D4)
+import Adafruit_GPIO.SPI as SPI
+import Adafruit_SSD1306
 
-# Change these
-# to the right size for your display!
-WIDTH = 128
-HEIGHT = 64  # Change to 64 if needed
-BORDER = 5
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 
-# Use for I2C.
-i2c = board.I2C()
-oled = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C, reset=oled_reset)
+import subprocess
+
+# Setup MQ-3 Sensor
+import Adafruit_ADS1x15
+adc = Adafruit_ADS1x15.ADS1115()
+GAIN = 1
+
+# Raspberry Pi pin configuration:
+RST = None     # on the PiOLED this pin isnt used
+# Note the following are only used with SPI:
+DC = 23
+SPI_PORT = 0
+SPI_DEVICE = 0
+
+# 128x64 display with hardware I2C:
+disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
+
+
+# Initialize library.
+disp.begin()
 
 # Clear display.
-oled.fill(0)
-oled.show()
+disp.clear()
+disp.display()
 
 # Create blank image for drawing.
 # Make sure to create image with mode '1' for 1-bit color.
-image = Image.new("1", (oled.width, oled.height))
+width = disp.width
+height = disp.height
+image = Image.new('1', (width, height))
 
 # Get drawing object to draw on image.
 draw = ImageDraw.Draw(image)
 
-# Draw a white background
-draw.rectangle((0, 0, oled.width, oled.height), outline=255, fill=255)
+# Draw a black filled box to clear the image.
+draw.rectangle((0,0,width,height), outline=0, fill=0)
 
-# Draw a smaller inner rectangle
-draw.rectangle(
-    (BORDER, BORDER, oled.width - BORDER - 1, oled.height - BORDER - 1),
-    outline=0,
-    fill=0,
-)
+# Draw some shapes.
+# First define some constants to allow easy resizing of shapes.
+padding = -2
+top = padding
+bottom = height-padding
+# Move left to right keeping track of the current x position for drawing shapes.
+x = 0
 
+#set timer for breathalyzer reading
+timer_value = 10
+highest_value = 0
 # Load default font.
-font = ImageFont.load_default()
+font = ImageFont.truetype('PixelOperator8.ttf',16)
 
-# Draw Some Text
-text = "Face Beer"
-(font_width, font_height) = font.getsize(text)
-draw.text(
-    (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
-    text,
-    font=font,
-    fill=255,
-)
+while True:
+    mq3reading = adc.read_adc(0, gain=GAIN)
+    # Draw a black filled box to clear the image.
+    draw.rectangle((0,0,width,height), outline=0, fill=0)
+    if(highest_value < mq3reading or timer_value == 0):
+        highest_value = mq3reading
+        timer_value = 10
+    timer_value = timer_value - 1
 
-# Display image
-oled.image(image)
-oled.show()
+    # Write two lines of text.
+    
+    draw.text((x+30, top+25), str(highest_value),font=font, fill=255)
+    #draw.text((x, top+8),     str(CPU), font=font, fill=255)
+    #draw.text((x, top+16),    str(MemUsage),  font=font, fill=255)
+    #draw.text((x, top+25),    str(Disk),  font=font, fill=255)
+
+    # Display image.
+    disp.image(image)
+    disp.display()
+    time.sleep(.1)
+
