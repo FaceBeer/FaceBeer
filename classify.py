@@ -1,7 +1,6 @@
 import numpy as np
 from PIL import Image
 import tflite_runtime.interpreter as tflite
-from sklearn.metrics import classification_report
 
 
 class Model:
@@ -32,23 +31,3 @@ class Model:
         output = self.interpreter.get_tensor(output_details['index'])
         prediction = np.argmax(output)
         return self.labels[int(prediction)]
-
-
-def main():
-    model = Model()
-    preds = []
-    truths = []
-    for person in ["max", "connor", "grant", "emre"]:
-        for i in range(50):
-            image_path = f"/home/grant/code/FaceBeerML/data/{person}/{str(i).zfill(5)}.jpg"
-            img = Image.open(image_path).convert('RGB')
-            pred = model.predict(img)
-            print(pred)
-            preds.append(pred)
-            truths.append(person)
-
-    print(classification_report(truths, preds))
-
-
-if __name__ == '__main__':
-    main()
