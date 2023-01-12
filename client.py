@@ -2,6 +2,7 @@ import requests
 import time
 import json
 
+
 class Client:
     def __init__(self):
         self.url = "http://api.facebeer.net:8000/append"
@@ -14,8 +15,7 @@ class Client:
         response = json.loads(response.text)
         return response["code"]
 
-# response = requests.post(url, data=data)
-# print(response.text)
+
 if __name__ == "__main__":
     client = Client()
-    print(client.add_row("Max", .6))
+    print(client.add_row("Grant", .45))
