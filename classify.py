@@ -5,8 +5,8 @@ import tflite_runtime.interpreter as tflite
 
 class Model:
     def __init__(self):
-        self.model_path = "~/model.tflite"
-        self.labels_path = "~/labels.txt"
+        self.model_path = "/home/facebeer/model.tflite"
+        self.labels_path = "/home/facebeer/labels.txt"
         self.labels = self.read_label_file()
         self.interpreter = tflite.Interpreter(self.model_path)
         self.interpreter.allocate_tensors()
