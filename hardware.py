@@ -35,18 +35,18 @@ class Display:
         width = self.disp.width
         height = self.disp.height
         self.image = Image.new('1', (width, height))
-        self.draw = ImageDraw.Draw(image)
+        self.draw = ImageDraw.Draw(self.image)
         #load Font
         self.font = ImageFont.truetype('PixelOperator8.ttf',16)
         # Draw a black filled box to clear the image.
         self.draw.rectangle((0,0,width,height), outline=0, fill=0)
         #write in the middle of display
         self.draw.text((30, 23), str(msg),font=font, fill=255)
-        self.disp.image(image)
+        self.disp.image(self.image)
         self.disp.display()
         time.sleep(.1)
 
     def breathalyzer_read(self):
-        self.mq3reading = adc.read_adc(0, gain=GAIN)
+        self.mq3reading = self.adc.read_adc(0, gain=self.GAIN)
         return self.mq3reading
 
