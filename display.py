@@ -43,10 +43,11 @@ class Display:
         (font_width, font_height) = self.font.getsize(text)
         #set scroll speed
         velocity = -2
+        pos = self.oled.width
         if font_width > self.oled.width:
             while True:
                 draw.rectangle((0,0,self.oled.width,self.oled.height), outline=0, fill=0)
-                x = self.oled.width
+                x = pos
                 for i, c in enumerate(text):
                 # Stop drawing if off the right side of screen.
                     if x > self.oled.width:
