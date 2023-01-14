@@ -74,7 +74,7 @@ class Controller:
                     # uncertain about who this is, assume it's a "guest"
                     self.sess.name = "Guest"
                     self.sess.confidence = 1.0 - self.sess.confidence # if it's 60% emre, then it's 40% guest
-                print(f"Final name: {self.sess.name}, confidence: {self.sess.confidence:.3f}")
+                print(f"Final name: {self.sess.name}, confidence: {self.sess.confidence:.3f}. You have 5s to confirm.")
                 self.sess.reset_start_time = time.time()
                 self.sess.state = State.IDENTIFIED
             elif self.sess.state == State.IDENTIFIED:
@@ -105,6 +105,7 @@ class Controller:
                 if self.button.get():
                     print("Done button pressed, resetting")
                     self.sess = Session()
+                    time.sleep(2)
             else:
                 print("ERROR OCCURRED")
 
