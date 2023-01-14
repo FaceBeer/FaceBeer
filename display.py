@@ -1,5 +1,5 @@
-
-
+import math
+import time
 import board
 import digitalio
 from PIL import Image, ImageDraw, ImageFont
@@ -16,8 +16,7 @@ class Display:
         #For I2C
         self.i2c = board.I2C()  # uses board.SCL and board.SDA
         self.oled = adafruit_ssd1306.SSD1306_I2C(self.WIDTH, self.HEIGHT, self.i2c, addr=0x3C, reset=oled_reset)
-        # load Font
-        self.font = ImageFont.truetype('PixelOperator8.ttf', 16)
+        
         
 
     def clear_display(self):
@@ -25,7 +24,9 @@ class Display:
         self.oled.fill(0)
         self.oled.show()
 
-    def display_write(self,msg):
+    def display_write(self,msg,size):
+        # load Font
+        self.font = ImageFont.truetype('PixelOperator8.ttf', size)
         # Create blank image for drawing.
         # Make sure to create image with mode '1' for 1-bit color.
         image = Image.new("1", (self.oled.width, self.oled.height))
@@ -38,7 +39,11 @@ class Display:
         # Draw Some Text
         text = msg
         (font_width, font_height) = self.font.getsize(text)
-        draw.text((self.oled.width // 2 - font_width // 2, self.oled.height // 2 - font_height // 2),text,font=self.font,fill=255,)
+        if font_width < self.oled.width:
+            draw.text((self.oled.width // 2 - font_width // 2, self.oled.height // 2 - font_height // 2),text,font=self.font,fill=255,)
+        elif font_width > self.oled.width:
+            
+        
         self.oled.image(image)
         self.oled.show()
 
