@@ -38,4 +38,8 @@ class Button:
         GPIO.setup(self.button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def get(self):
+        """
+        Gets the state of the button
+        :return: True if pressed
+        """
         return not GPIO.input(self.button_pin)
