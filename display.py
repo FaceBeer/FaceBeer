@@ -73,13 +73,6 @@ class Display:
             self.oled.image(image)
             self.oled.show()
            
-        
-        
-
-if __name__ == "__main__":
-    display = Display()
-    display.display_write("tarantulas are great",13)
-
 
 
 
