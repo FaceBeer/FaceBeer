@@ -41,4 +41,4 @@ class Display:
         self.oled.show()
 if __name__ == "__main__":
     display = Display()
-    display.write_display("dickbutt")
+    display.display_write("dickbutt")
