@@ -23,6 +23,7 @@ class Display:
         # Clear display.
         self.oled.fill(0)
         self.oled.show()
+        
 
     def display_write(self,msg,size):
         # load Font
@@ -38,15 +39,36 @@ class Display:
         draw.rectangle((self.BORDER, self.BORDER, self.oled.width - self.BORDER - 1, self.oled.height - self.BORDER - 1),outline=0,fill=0,)
         # Draw Some Text
         text = msg
+        maxwidth, unused = draw.textsize(text, font=self.font)
         (font_width, font_height) = self.font.getsize(text)
-        
-        #if font_width > self.oled.width:
-            #while True:
-                #draw.rectangle((0,0,self.oled.width,self.oled.height), outline=0, fill=0)
-
-
-        #elif font_width < self.oled.width:
-        draw.text((self.oled.width // 2 - font_width // 2, self.oled.height // 2 - font_height // 2),text,font=self.font,fill=255,)
+        #set scroll speed
+        velocity = -2
+        if font_width > self.oled.width:
+            while True:
+                draw.rectangle((0,0,self.oled.width,self.oled.height), outline=0, fill=0)
+                x = self.oled.width
+                for i, c in enumerate(text):
+                # Stop drawing if off the right side of screen.
+                    if x > self.oled.width:
+                        break
+                # Calculate width but skip drawing if off the left side of screen.
+                if x < -10:
+                    char_width, char_height = draw.textsize(c, font=self.font)
+                    x += char_width
+                    continue
+                # Draw text.
+                draw.text((x, self.oled.height// 2- font_height//2), c, font=self.font, fill=255)
+                # Increment x position based on chacacter width.
+                char_width, char_height = draw.textsize(c, font=self.font)
+                x += font_width
+                # Draw the image buffer.
+                self.oled.image(image)
+                self.oled.show()
+                pos += velocity
+                if pos < -maxwidth:
+                    break
+        elif font_width < self.oled.width:
+            draw.text((self.oled.width // 2 - font_width // 2, self.oled.height // 2 - font_height // 2),text,font=self.font,fill=255,)
             
            
         
@@ -55,7 +77,7 @@ class Display:
 
 if __name__ == "__main__":
     display = Display()
-    display.display_write("dickbutt",16)
+    display.display_write("Assholes Are real bitches in this world am i right",13)
 
 
 
