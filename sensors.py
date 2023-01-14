@@ -26,10 +26,6 @@ class Camera:
         img = Image.open(stream)
         return img
 
-    def breathalyzer_read(self):
-        self.mq3reading = self.adc.read_adc(0, gain=self.GAIN)
-        return self.mq3reading
-
 
 class Button:
     def __init__(self):
@@ -43,3 +39,13 @@ class Button:
         :return: True if pressed
         """
         return not GPIO.input(self.button_pin)
+
+class MQ3:
+    def __init__(self):
+        # Setup MQ-3 Sensor
+        self.adc = Adafruit_ADS1x15.ADS1115()
+        self.GAIN = 1
+
+    def read(self):
+        self.mq3reading = self.adc.read_adc(0, gain=self.GAIN)
+        return self.mq3reading
