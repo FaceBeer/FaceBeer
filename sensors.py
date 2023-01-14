@@ -6,6 +6,7 @@ from picamera import PiCamera
 import numpy as np
 
 import RPi.GPIO as GPIO
+import Adafruit_ADS1x15
 
 
 class Camera:
