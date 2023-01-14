@@ -3,6 +3,7 @@ from picamera import PiCamera
 from classify import Model
 from sensors import Camera
 
+
 def main():
     camera = Camera()
     model = Model()
