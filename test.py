@@ -6,7 +6,7 @@ model = Model()
 preds = []
 truths = []
 for name in ["grant", "connor", "max", "emre"]:
-    for i in range(25):
+    for i in range(100):
         path = f"/home/facebeer/data/data/{name}/{str(i).zfill(5)}.jpg"
         img = Image.open(path)
         pred, _ = model.predict(img)
