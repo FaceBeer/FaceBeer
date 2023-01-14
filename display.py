@@ -25,9 +25,9 @@ class Display:
         self.oled.show()
         
 
-    def display_write(self,msg,size):
+    def display_write(self,msg):
         # load Font
-        self.font = ImageFont.truetype('PixelOperator8.ttf', size)
+        self.font = ImageFont.truetype('PixelOperator8.ttf', 20)
         # Create blank image for drawing.
         # Make sure to create image with mode '1' for 1-bit color.
         image = Image.new("1", (self.oled.width, self.oled.height))

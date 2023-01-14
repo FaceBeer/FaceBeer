@@ -3,11 +3,11 @@ import time
 from argparse import ArgumentParser
 
 from picamera import PiCamera
-
+from multiprocessing import Process
 from model import Model
 from sensors import Camera, Button, MQ3
 from client import Client
-
+from display import Display
 
 class State(Enum):
     INITIAL = 0
@@ -30,6 +30,12 @@ class Session:
         self.bac_readings = []
         self.reading_bac_start_time = None
         self.bac = None
+        self.process = None
+    
+    def set_state(self,state):
+        self.state = state
+        if self.process is not None and self.process.is_alive():
+            self.process.terminate()
 
 
 class Controller:
@@ -40,12 +46,16 @@ class Controller:
         self.mqp3 = MQ3()
         self.model = Model()
         self.client = Client()
+        self.display =Display()
         time.sleep(2)
 
     def display_text(self, text):
+
         if self.sess.displayed_text != text:
             # text not yet displayed
-            # TODO: display text
+            self.display.clear_display()
+            self.proceess = Process(target=self.display.display_write)
+            self.display.display_write(text)
             self.sess.displayed_text = text
 
     def run(self):
@@ -57,7 +67,7 @@ class Controller:
                 if self.button.get():
                     print("Selfie button pressed")
                     # pressed, time to take the selfie
-                    self.sess.state = State.SELFIE
+                    self.sess.set_state(State.SELFIE)
             elif self.sess.state == State.SELFIE:
                 text = "Say Cheese!"
                 self.display_text(text)
@@ -65,7 +75,7 @@ class Controller:
                 self.sess.image = self.camera.get_frame()
                 # image grabbed, time to process
                 print("Picture taken")
-                self.sess.state = State.ML
+                self.sess.set_state(State.ML)
             elif self.sess.state == State.ML:
                 text = "Processing your pic"
                 self.display_text(text)
@@ -79,7 +89,7 @@ class Controller:
                     self.sess.confidence = 1.0 - self.sess.confidence  # if it's 60% emre, then it's 40% guest
                 print(f"Final name: {self.sess.name}, confidence: {self.sess.confidence:.3f}. You have 10s to confirm.")
                 self.sess.reset_start_time = time.time()
-                self.sess.state = State.IDENTIFIED
+                self.sess.set_state(State.IDENTIFIED)
             elif self.sess.state == State.IDENTIFIED:
                 text = f"{self.sess.name}?\nHold button and blow\nResetting in 10s"
                 self.display_text(text)
@@ -91,7 +101,7 @@ class Controller:
                     # button pressed, assume user is blowing
                     print("Blow button pressed")
                     self.sess.reading_bac_start_time = time.time()
-                    self.sess.state = State.BLOW
+                    self.sess.set_state(State.BLOW)
             elif self.sess.state == State.BLOW:
                 text = "Blow for 10s"
                 self.display_text(text)
@@ -100,7 +110,7 @@ class Controller:
                 else:
                     self.sess.bac = round(max(self.sess.bac_readings), 3)
                     self.client.add_row(self.sess.name, self.sess.bac)
-                    self.sess.state = State.DONE
+                    self.sess.set_state(State.DONE)
                     print("Max BAC found", self.sess.bac)
             elif self.sess.state == State.DONE:
                 text = f"BAC: {self.sess.bac}\nPress to reset"
