@@ -73,7 +73,7 @@ class Controller:
                 self.display_text(text)
                 if not self.button.get() and time.time() - self.sess.reset_start_time > 5:
                     # user didn't press button in 5 seconds, assume model was wrong
-                    self.sess.state = State.INITIAL
+                    self.sess = Session()
                 elif self.button.get():
                     # button pressed, assume user is blowiung
                     self.sess.state = State.BLOW
