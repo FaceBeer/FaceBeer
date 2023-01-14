@@ -1,5 +1,5 @@
-
-
+import math
+import time
 import board
 import digitalio
 from PIL import Image, ImageDraw, ImageFont
@@ -39,7 +39,11 @@ class Display:
         # Draw Some Text
         text = msg
         (font_width, font_height) = self.font.getsize(text)
-        draw.text((self.oled.width // 2 - font_width // 2, self.oled.height // 2 - font_height // 2),text,font=self.font,fill=255,)
+        if font_width < self.oled.width:
+            draw.text((self.oled.width // 2 - font_width // 2, self.oled.height // 2 - font_height // 2),text,font=self.font,fill=255,)
+        elif font_width > self.oled.width:
+            
+        
         self.oled.image(image)
         self.oled.show()
 
