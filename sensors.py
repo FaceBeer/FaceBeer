@@ -23,3 +23,7 @@ class Camera:
         stream.seek(0)
         img = Image.open(stream)
         return img
+
+    def breathalyzer_read(self):
+        self.mq3reading = self.adc.read_adc(0, gain=self.GAIN)
+        return self.mq3reading
