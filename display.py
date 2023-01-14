@@ -54,14 +54,14 @@ class Display:
                         break
                 # Calculate width but skip drawing if off the left side of screen.
                     if x < -10:
-                        #char_width, char_height = draw.textsize(c, font=self.font)
-                        x += font_width
+                        char_width, char_height = draw.textsize(c, font=self.font)
+                        x += char_width
                         continue
                     # Draw text.
                     draw.text((x, self.oled.height// 2- font_height//2), c, font=self.font, fill=255)
                     # Increment x position based on chacacter width.
-                    #char_width, char_height = draw.textsize(c, font=self.font)
-                    x += font_width
+                    char_width, char_height = draw.textsize(c, font=self.font)
+                    x += char_width
                 # Draw the image buffer.
                 self.oled.image(image)
                 self.oled.show()
