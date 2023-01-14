@@ -62,7 +62,7 @@ class Controller:
         print("Starting main loop")
         while True:  # main loop for state machine
             if self.sess.state == State.INITIAL:
-                text = "FaceBeer\nPress for selfie"
+                text = "FaceBeer Press for selfie"
                 self.display_text(text)
                 if self.button.get():
                     print("Selfie button pressed")
@@ -91,7 +91,7 @@ class Controller:
                 self.sess.reset_start_time = time.time()
                 self.sess.set_state(State.IDENTIFIED)
             elif self.sess.state == State.IDENTIFIED:
-                text = f"{self.sess.name}?\nHold button and blow\nResetting in 10s"
+                text = f"{self.sess.name}? Hold button and blow Resetting in 10s"
                 self.display_text(text)
                 if time.time() - self.sess.reset_start_time > 10:
                     # user didn't press button in 10 seconds, assume model was wrong
@@ -113,7 +113,7 @@ class Controller:
                     self.sess.set_state(State.DONE)
                     print("Max BAC found", self.sess.bac)
             elif self.sess.state == State.DONE:
-                text = f"BAC: {self.sess.bac}\nPress to reset"
+                text = f"BAC: {self.sess.bac} Press to reset"
                 self.display_text(text)
                 if self.button.get():
                     print("Done button pressed, resetting")
