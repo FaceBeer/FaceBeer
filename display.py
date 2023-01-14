@@ -42,7 +42,7 @@ class Display:
         maxwidth, unused = draw.textsize(text, font=self.font)
         (font_width, font_height) = self.font.getsize(text)
         #set scroll speed
-        velocity = -4
+        velocity = -1
         pos = self.oled.width
         if font_width > self.oled.width:
             while True:
