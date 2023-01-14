@@ -50,8 +50,8 @@ class Display:
                 x = pos
                 for i, c in enumerate(text):
                 # Stop drawing if off the right side of screen.
-                    #if x > self.oled.width:
-                        #break
+                    if x > self.oled.width:
+                        break
                 # Calculate width but skip drawing if off the left side of screen.
                     if x < -10:
                         char_width, char_height = draw.textsize(c, font=self.font)
@@ -67,7 +67,7 @@ class Display:
                 self.oled.show()
                 pos += velocity
                 if pos < -maxwidth:
-                    break
+                    pos =self.oled.width
         elif font_width < self.oled.width:
             draw.text((self.oled.width // 2 - font_width // 2, self.oled.height // 2 - font_height // 2),text,font=self.font,fill=255,)
             self.oled.image(image)
