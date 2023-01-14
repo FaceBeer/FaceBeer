@@ -53,7 +53,7 @@ class Display:
                     if x > self.oled.width:
                         break
                 # Calculate width but skip drawing if off the left side of screen.
-                    if x < 0:
+                    if x > -10:
                         char_width, char_height = draw.textsize(c, font=self.font)
                         x += char_width
                         continue
