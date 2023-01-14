@@ -8,7 +8,7 @@ def main():
     camera = Camera()
     model = Model()
     img = camera.get_frame()
-    name = model.predict(img)
+    name, confidence = model.predict(img)
     print(name)
 
 

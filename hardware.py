@@ -45,3 +45,7 @@ class Display:
         self.disp.image(image)
         self.disp.display()
         time.sleep(.1)
+
+if __name__ == "__main__":
+    display = Display()
+    display.write_display("bonjour")
