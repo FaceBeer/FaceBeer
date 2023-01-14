@@ -54,7 +54,9 @@ class Controller:
                 # image grabbed, time to process
                 self.session.state = State.FACE
             elif self.session.state == State.ML:
-                text = "Processing"
+                text = "Processing your face"
+                self.display_text(text)
+
             elif self.session.state == State.IDENTIFIED:
                 text = ""
             elif self.session.state == State.BLOW:
