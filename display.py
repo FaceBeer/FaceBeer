@@ -43,19 +43,20 @@ class Display:
         (font_width, font_height) = self.font.getsize(text)
         #set scroll speed
         velocity = -2
+        pos = self.oled.width
         if font_width > self.oled.width:
             while True:
                 draw.rectangle((0,0,self.oled.width,self.oled.height), outline=0, fill=0)
-                x = self.oled.width
+                x = pos
                 for i, c in enumerate(text):
                 # Stop drawing if off the right side of screen.
                     if x > self.oled.width:
                         break
                 # Calculate width but skip drawing if off the left side of screen.
-                if x < -10:
-                    char_width, char_height = draw.textsize(c, font=self.font)
-                    x += char_width
-                    continue
+                    if x < -10:
+                        char_width, char_height = draw.textsize(c, font=self.font)
+                        x += char_width
+                        continue
                 # Draw text.
                 draw.text((x, self.oled.height// 2- font_height//2), c, font=self.font, fill=255)
                 # Increment x position based on chacacter width.
@@ -77,7 +78,7 @@ class Display:
 
 if __name__ == "__main__":
     display = Display()
-    display.display_write("Assholes Are real bitches in this world am i right",13)
+    display.display_write("tarantulas are great",13)
 
 
 
