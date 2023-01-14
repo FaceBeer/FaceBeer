@@ -30,4 +30,4 @@ class Model:
         output_details = self.interpreter.get_output_details()[0]
         output = self.interpreter.get_tensor(output_details['index'])
         prediction = np.argmax(output)
-        return self.labels[int(prediction)], output[prediction]
+        return self.labels[int(prediction)], output[int(prediction)]
