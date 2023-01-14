@@ -6,6 +6,7 @@ from picamera import PiCamera
 import numpy as np
 
 import RPi.GPIO as GPIO
+import Adafruit_ADS1x15
 
 
 class Camera:
@@ -47,5 +48,4 @@ class MQ3:
         self.GAIN = 1
 
     def read(self):
-        self.mq3reading = self.adc.read_adc(0, gain=self.GAIN)
-        return self.mq3reading
+        return self.adc.read_adc(0, gain=self.GAIN)
