@@ -35,7 +35,7 @@ class Session:
     def set_state(self,state):
         self.state = state
         if self.process is not None and self.process.is_alive():
-            self.process.terminate()
+            self.process.kill()
 
 
 class Controller:
