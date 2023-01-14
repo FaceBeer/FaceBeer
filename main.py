@@ -6,6 +6,7 @@ from picamera import PiCamera
 
 from model import Model
 from sensors import Camera, Button, MQ3
+from client import Client
 
 
 class State(Enum):
@@ -38,6 +39,7 @@ class Controller:
         self.camera = Camera()
         self.mqp3 = MQ3()
         self.model = Model()
+        self.client = Client()
         time.sleep(2)
 
     def display_text(self, text):
@@ -96,6 +98,7 @@ class Controller:
                     self.sess.bac_readings.append(self.mqp3.read())
                 else:
                     self.sess.bac = round(max(self.sess.bac_readings), 3)
+                    self.client.add_row(self.sess.name, self.sess.bac)
                     self.sess.state = State.DONE
                     print("Max BAC found", self.sess.bac)
             elif self.sess.state == State.DONE:
