@@ -71,6 +71,7 @@ class Controller:
                 self.display_text(text)
                 print("Beginning ML")
                 self.sess.name, self.sess.confidence = self.model.predict(self.sess.image)
+                self.sess.name = self.sess.name.title()
                 print(f"Original name: {self.sess.name}, confidence: {self.sess.confidence:.3f}")
                 if self.sess.confidence < self.sess.guest_threshold:
                     # uncertain about who this is, assume it's a "guest"
