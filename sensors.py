@@ -30,6 +30,7 @@ class Camera:
 
 class Button:
     def __init__(self):
+        print(GPIO.getmode())
         GPIO.setmode(GPIO.BOARD)
         self.button_pin = 16
         GPIO.setup(self.button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
