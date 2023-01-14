@@ -55,7 +55,7 @@ class Display:
 
 if __name__ == "__main__":
     display = Display()
-    display.display_write("dickbutt")
+    display.display_write("dickbutt",16)
 
 
 
