@@ -80,7 +80,7 @@ class Controller:
             elif self.sess.state == State.IDENTIFIED:
                 text = f"{self.sess.name}?\nHold button and blow\nResetting in 5s"
                 self.display_text(text)
-                if not self.button.get() and time.time() - self.sess.reset_start_time > 5:
+                if time.time() - self.sess.reset_start_time > 5:
                     # user didn't press button in 5 seconds, assume model was wrong
                     print("Wrong name, resetting")
                     self.sess = Session()
