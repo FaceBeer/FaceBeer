@@ -87,6 +87,7 @@ class Controller:
                 elif self.button.get():
                     # button pressed, assume user is blowing
                     print("Blow button pressed")
+                    self.sess.reading_bac_start_time = time.time()
                     self.sess.state = State.BLOW
             elif self.sess.state == State.BLOW:
                 text = "Blow for 5s"
