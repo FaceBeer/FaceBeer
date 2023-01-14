@@ -41,9 +41,13 @@ class Display:
         text = msg
         maxwidth, unused = draw.textsize(text, font=self.font)
         (font_width, font_height) = self.font.getsize(text)
-        #set scroll speed
+        # Set animation and sine wave parameters.
+        amplitude = self.oled.height/4
+        offset = self.oled.height/2 - 4
         velocity = -2
-        pos = self.oled.width
+        startpos = self.oled.width
+        pos = startpos
+
         if font_width > self.oled.width:
             while True:
                 draw.rectangle((0,0,self.oled.width,self.oled.height), outline=0, fill=0)
@@ -53,12 +57,14 @@ class Display:
                     if x > self.oled.width:
                         break
                 # Calculate width but skip drawing if off the left side of screen.
-                    if x < 100:
+                    if x < -10:
                         char_width, char_height = draw.textsize(c, font=self.font)
                         x += char_width
                         continue
+                    # Calculate offset from sine wave.
+                    y = offset+math.floor(amplitude*math.sin(x/float(width)*2.0*math.pi))
                     # Draw text.
-                    draw.text((x, self.oled.height// 2- font_height//2), c, font=self.font, fill=255)
+                    draw.text((x, y), c, font=self.font, fill=255)
                     # Increment x position based on chacacter width.
                     char_width, char_height = draw.textsize(c, font=self.font)
                     x += font_width
