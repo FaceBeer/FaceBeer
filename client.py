@@ -13,6 +13,7 @@ class Client:
         data = {"name": name, "bac": bac, "timestamp": timestamp}
         response = requests.post(self.url, data)
         response = json.loads(response.text)
+        print(f"Dynamodb returned {response['code']}")
         return response["code"]
 
 

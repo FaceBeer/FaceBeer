@@ -6,6 +6,7 @@ from picamera import PiCamera
 
 from model import Model
 from sensors import Camera, Button, MQ3
+from client import Client
 
 
 class State(Enum):
@@ -38,6 +39,7 @@ class Controller:
         self.camera = Camera()
         self.mqp3 = MQ3()
         self.model = Model()
+        self.client = Client()
         time.sleep(2)
 
     def display_text(self, text):
@@ -73,15 +75,15 @@ class Controller:
                 if self.sess.confidence < self.sess.guest_threshold:
                     # uncertain about who this is, assume it's a "guest"
                     self.sess.name = "Guest"
-                    self.sess.confidence = 1.0 - self.sess.confidence # if it's 60% emre, then it's 40% guest
-                print(f"Final name: {self.sess.name}, confidence: {self.sess.confidence:.3f}. You have 5s to confirm.")
+                    self.sess.confidence = 1.0 - self.sess.confidence  # if it's 60% emre, then it's 40% guest
+                print(f"Final name: {self.sess.name}, confidence: {self.sess.confidence:.3f}. You have 10s to confirm.")
                 self.sess.reset_start_time = time.time()
                 self.sess.state = State.IDENTIFIED
             elif self.sess.state == State.IDENTIFIED:
-                text = f"{self.sess.name}?\nHold button and blow\nResetting in 5s"
+                text = f"{self.sess.name}?\nHold button and blow\nResetting in 10s"
                 self.display_text(text)
-                if time.time() - self.sess.reset_start_time > 5:
-                    # user didn't press button in 5 seconds, assume model was wrong
+                if time.time() - self.sess.reset_start_time > 10:
+                    # user didn't press button in 10 seconds, assume model was wrong
                     print("Wrong name, resetting")
                     self.sess = Session()
                 elif self.button.get():
@@ -90,15 +92,15 @@ class Controller:
                     self.sess.reading_bac_start_time = time.time()
                     self.sess.state = State.BLOW
             elif self.sess.state == State.BLOW:
-                text = "Blow for 5s"
+                text = "Blow for 10s"
                 self.display_text(text)
-                if time.time() - self.sess.reading_bac_start_time < 5:
+                if time.time() - self.sess.reading_bac_start_time < 10:
                     self.sess.bac_readings.append(self.mqp3.read())
                 else:
-                    self.sess.bac = round(max(self.sess.bac_readings),3)
+                    self.sess.bac = round(max(self.sess.bac_readings), 3)
+                    self.client.add_row(self.sess.name, self.sess.bac)
                     self.sess.state = State.DONE
                     print("Max BAC found", self.sess.bac)
-
             elif self.sess.state == State.DONE:
                 text = f"BAC: {self.sess.bac}\nPress to reset"
                 self.display_text(text)
