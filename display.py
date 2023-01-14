@@ -78,7 +78,7 @@ class Display:
 
 if __name__ == "__main__":
     display = Display()
-    display.display_write("bread",13)
+    display.display_write("tarantulas are great",13)
 
 
 
