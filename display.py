@@ -62,7 +62,7 @@ class Display:
                         x += char_width
                         continue
                     # Calculate offset from sine wave.
-                    y = offset+math.floor(amplitude*math.sin(x/float(width)*2.0*math.pi))
+                    y = offset+math.floor(amplitude*math.sin(x/float(self.oled.width)*2.0*math.pi))
                     # Draw text.
                     draw.text((x, y), c, font=self.font, fill=255)
                     # Increment x position based on chacacter width.
