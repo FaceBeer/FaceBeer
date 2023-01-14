@@ -56,7 +56,6 @@ class Controller:
             self.display.clear_display()
             self.proceess = Process(target=self.display.display_write,args=str(text))
             self.proceess.start()
-            self.display.display_write(text)
             self.sess.displayed_text = text
 
     def run(self):
