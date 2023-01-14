@@ -10,7 +10,7 @@ import Adafruit_ADS1x15
 import subprocess
 
 
-class Display:
+class Hardware:
     def __init__(self):
         # Setup MQ-3 Sensor
         self.adc = Adafruit_ADS1x15.ADS1115()
@@ -46,6 +46,3 @@ class Display:
         self.disp.display()
         time.sleep(.1)
 
-if __name__ == "__main__":
-    display = Display()
-    display.write_display("bonjour")

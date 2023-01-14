@@ -1,67 +1,44 @@
-# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
-# SPDX-License-Identifier: MIT
-
-"""
-This demo will fill the screen with white, draw a black box on top
-and then print Hello World! in the center of the display
-
-This example is for use on (Linux) computers that are using CPython with
-Adafruit Blinka to support CircuitPython libraries. CircuitPython does
-not support PIL/pillow (python imaging library)!
-"""
-
 import board
 import digitalio
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306
 
-# Define the Reset Pin
-oled_reset = digitalio.DigitalInOut(board.D4)
 
-# Change these
-# to the right size for your display!
-WIDTH = 128
-HEIGHT = 64 
-BORDER = 5
+class Display:
+    def __init__(self):
+        # Define the Reset Pin
+        oled_reset = digitalio.DigitalInOut(board.D4)
+        self.BORDER = 5
+        self.WIDTH = 128
+        self.HEIGHT = 64 
+        #For I2C
+        self.i2c = board.I2C()  # uses board.SCL and board.SDA
+        self.oled = adafruit_ssd1306.SSD1306_I2C(self.WIDTH, self.HEIGHT, self.i2c, addr=0x3C, reset=oled_reset)
+        # load Font
+        self.font = ImageFont.truetype('PixelOperator8.ttf', 16)
+        
 
-# Use for I2C.
-i2c = board.I2C()  # uses board.SCL and board.SDA
-oled = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C, reset=oled_reset)
+    def clear_display(self):
+        # Clear display.
+        self.oled.fill(0)
+        self.oled.show()
 
-# Clear display.
-oled.fill(0)
-oled.show()
-
-# Create blank image for drawing.
-# Make sure to create image with mode '1' for 1-bit color.
-image = Image.new("1", (oled.width, oled.height))
-
-# Get drawing object to draw on image.
-draw = ImageDraw.Draw(image)
-
-# Draw a white background
-draw.rectangle((0, 0, oled.width, oled.height), outline=255, fill=255)
-
-# Draw a smaller inner rectangle
-draw.rectangle(
-    (BORDER, BORDER, oled.width - BORDER - 1, oled.height - BORDER - 1),
-    outline=0,
-    fill=0,
-)
-
-# Load default font.
-font = ImageFont.load_default()
-
-# Draw Some Text
-text = "popo"
-(font_width, font_height) = font.getsize(text)
-draw.text(
-    (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
-    text,
-    font=font,
-    fill=255,
-)
-
-# Display image
-oled.image(image)
-oled.show()
+    def display_write(self,msg):
+        # Create blank image for drawing.
+        # Make sure to create image with mode '1' for 1-bit color.
+        image = Image.new("1", (self.oled.width, self.oled.height))
+        # Get drawing object to draw on image.
+        draw = ImageDraw.Draw(image)
+        # Draw a white background
+        draw.rectangle((0, 0, self.oled.width, self.oled.height), outline=255, fill=255)
+        # Draw a smaller inner rectangle
+        draw.rectangle((self.BORDER, self.BORDER, self.oled.width - self.BORDER - 1, self.oled.height - self.BORDER - 1),outline=0,fill=0,)
+        # set the message
+        (font_width, font_height) = self.font.getsize(msg)
+        draw.msg((self.oled.width // 2 - font_width // 2, self.oled.height // 2 - font_height // 2),msg,font=self.font,fill=255,)
+        #display
+        self.oled.image(image)
+        self.oled.show()
+if __name__ == "__main__":
+    display = Display()
+    display.write_display("dickbutt")
