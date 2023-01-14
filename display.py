@@ -39,7 +39,7 @@ class Display:
         draw.rectangle((self.BORDER, self.BORDER, self.oled.width - self.BORDER - 1, self.oled.height - self.BORDER - 1),outline=0,fill=0,)
         # Draw Some Text
         text = msg
-        maxwidth, unused = draw.textsize(text, font=font)
+        maxwidth, unused = draw.textsize(text, font=self.font)
         (font_width, font_height) = self.font.getsize(text)
         #set scroll speed
         velocity = -2
