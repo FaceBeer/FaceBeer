@@ -48,4 +48,9 @@ class MQ3:
         self.GAIN = 1
 
     def read(self):
-        return self.adc.read_adc(0, gain=self.GAIN)
+        raw = self.adc.read_adc(0, gain=self.GAIN)
+        bac = self.raw_to_bac(raw)
+        return bac
+
+    def raw_to_bac(self, x):
+        return 3E-10*x**2 - 6E-07*x
