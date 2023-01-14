@@ -33,12 +33,20 @@ class Display:
         draw.rectangle((0, 0, self.oled.width, self.oled.height), outline=255, fill=255)
         # Draw a smaller inner rectangle
         draw.rectangle((self.BORDER, self.BORDER, self.oled.width - self.BORDER - 1, self.oled.height - self.BORDER - 1),outline=0,fill=0,)
-        # set the message
-        (font_width, font_height) = self.font.getsize(msg)
-        draw.msg((self.oled.width // 2 - font_width // 2, self.oled.height // 2 - font_height // 2),msg,font=self.font,fill=255,)
-        #display
+        # Draw Some Text
+        text = msg
+        (font_width, font_height) = self.font.getsize(text)
+        draw.text((self.oled.width // 2 - font_width // 2, self.oled.height // 2 - font_height // 2),text,font=self.font,fill=255,)
         self.oled.image(image)
         self.oled.show()
+
 if __name__ == "__main__":
     display = Display()
     display.display_write("dickbutt")
+
+
+
+
+
+
+
