@@ -67,7 +67,7 @@ class Display:
                 self.oled.show()
                 pos += velocity
                 if pos < -maxwidth:
-                    break
+                    pos = self.oled.width
         elif font_width < self.oled.width:
             draw.text((self.oled.width // 2 - font_width // 2, self.oled.height // 2 - font_height // 2),text,font=self.font,fill=255,)
             self.oled.image(image)
