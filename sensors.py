@@ -5,6 +5,8 @@ from PIL import Image
 from picamera import PiCamera
 import numpy as np
 
+import RPi.GPIO as GPIO
+
 
 class Camera:
     def __init__(self):
@@ -27,3 +29,13 @@ class Camera:
     def breathalyzer_read(self):
         self.mq3reading = self.adc.read_adc(0, gain=self.GAIN)
         return self.mq3reading
+
+
+class Button:
+    def __init__(self):
+        GPIO.setmode(GPIO.BOARD)
+        self.button_pin = 16
+        GPIO.setup(self.button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    def get(self):
+        return not GPIO.input(self.button_pin)
