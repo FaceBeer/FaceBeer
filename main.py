@@ -37,7 +37,6 @@ class Session:
         self.state = state
         print("Set state to", state.name)
         if self.process is not None and self.process.is_alive():
-            print("Killing display proccess")
             self.process.kill()
 
 
