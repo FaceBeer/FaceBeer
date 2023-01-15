@@ -78,7 +78,7 @@ class Controller:
                 print("Picture taken")
                 self.sess.set_state(State.ML)
             elif self.sess.state == State.ML:
-                text = "Processing your pic"
+                text = "..."
                 self.display_text(text)
                 print("Beginning ML")
                 self.sess.name, self.sess.confidence = self.model.predict(self.sess.image)
