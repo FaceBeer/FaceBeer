@@ -37,7 +37,6 @@ class Session:
         self.state = state
         print("Set state to", state.name)
         if self.process is not None and self.process.is_alive():
-            print("Killing display proccess")
             self.process.kill()
 
 
@@ -79,7 +78,7 @@ class Controller:
                 print("Picture taken")
                 self.sess.set_state(State.ML)
             elif self.sess.state == State.ML:
-                text = "Processing your pic"
+                text = "..."
                 self.display_text(text)
                 print("Beginning ML")
                 self.sess.name, self.sess.confidence = self.model.predict(self.sess.image)
@@ -98,6 +97,7 @@ class Controller:
                 if time.time() - self.sess.reset_start_time > 10:
                     # user didn't press button in 10 seconds, assume model was wrong
                     print("Wrong name, resetting")
+                    self.sess.set_state(State.INITIAL)
                     self.sess = Session()
                 elif self.button.get():
                     # button pressed, assume user is blowing
@@ -119,6 +119,7 @@ class Controller:
                 self.display_text(text)
                 if self.button.get():
                     print("Done button pressed, resetting")
+                    self.sess.set_state(State.INITIAL)
                     self.sess = Session()
                     time.sleep(2)
             else:
