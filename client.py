@@ -5,7 +5,7 @@ import json
 
 class Client:
     def __init__(self):
-        self.url = "http://api.facebeer.net:8000/append"
+        self.url = "https://api.facebeer.net:8000/append"
 
     def add_row(self, name, bac):
         current_time = time.localtime()
