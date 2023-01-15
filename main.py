@@ -34,7 +34,9 @@ class Session:
     
     def set_state(self,state):
         self.state = state
+        print(self.process)
         if self.process is not None and self.process.is_alive():
+            print("killing proccess")
             self.process.kill()
 
 
