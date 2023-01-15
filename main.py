@@ -9,6 +9,7 @@ from sensors import Camera, Button, MQ3
 from client import Client
 from display import Display
 
+
 class State(Enum):
     INITIAL = 0
     SELFIE = 1
@@ -31,8 +32,8 @@ class Session:
         self.reading_bac_start_time = None
         self.bac = None
         self.process = None
-    
-    def set_state(self,state):
+
+    def set_state(self, state):
         self.state = state
         if self.process is not None and self.process.is_alive():
             self.process.terminate()
@@ -46,16 +47,15 @@ class Controller:
         self.mqp3 = MQ3()
         self.model = Model()
         self.client = Client()
-        self.display =Display()
+        self.display = Display()
         time.sleep(2)
 
     def display_text(self, text):
-
         if self.sess.displayed_text != text:
             # text not yet displayed
             self.display.clear_display()
-            self.proceess = Process(target=self.display.display_write,args=[text])
-            self.proceess.start()
+            self.process = Process(target=self.display.display_write, args=[text])
+            self.process.start()
             self.sess.displayed_text = text
 
     def run(self):
