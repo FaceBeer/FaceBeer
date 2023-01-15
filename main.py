@@ -35,10 +35,9 @@ class Session:
 
     def set_state(self, state):
         self.state = state
-        print(self.process)
-        print("im here")
+        print("Set state to", state.name)
         if self.process is not None and self.process.is_alive():
-            print("killing proccess")
+            print("Killing display proccess")
             self.process.kill()
 
 
