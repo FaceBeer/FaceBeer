@@ -56,8 +56,8 @@ class Controller:
         if self.sess.displayed_text != text:
             # text not yet displayed
             self.display.clear_display()
-            self.process = Process(target=self.display.display_write, args=[text])
-            self.process.start()
+            self.sess.process = Process(target=self.display.display_write, args=[text])
+            self.sess.process.start()
             self.sess.displayed_text = text
 
     def run(self):
