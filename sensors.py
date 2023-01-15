@@ -52,4 +52,5 @@ class MQ3:
         return bac
 
     def raw_to_bac(self, x):
-        return 3E-10*x**2 - 6E-07*x
+        # don't wanna return a negative, apply ReLu
+        return max(7E-06*x - 0.037, 0)
