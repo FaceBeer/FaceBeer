@@ -98,6 +98,7 @@ class Controller:
                 if time.time() - self.sess.reset_start_time > 10:
                     # user didn't press button in 10 seconds, assume model was wrong
                     print("Wrong name, resetting")
+                    self.sess.set_state(State.INITIAL)
                     self.sess = Session()
                 elif self.button.get():
                     # button pressed, assume user is blowing
@@ -119,6 +120,7 @@ class Controller:
                 self.display_text(text)
                 if self.button.get():
                     print("Done button pressed, resetting")
+                    self.sess.set_state(State.INITIAL)
                     self.sess = Session()
                     time.sleep(2)
             else:
